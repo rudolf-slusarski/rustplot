@@ -1,3 +1,9 @@
+use std::io::stdin;
+
 fn main() {
-    println!("Hello, world!");
+    println!("input equation:");
+    let mut equation = String::new();
+    stdin().read_line(&mut equation).expect("wrong input");
+
+    println!("{}", equation);
 }
