@@ -1,9 +1,9 @@
 use std::io::stdin;
+use rustplot::Equation;
 
 fn main() {
     println!("input equation:");
-    let mut equation = String::new();
-    stdin().read_line(&mut equation).expect("wrong input");
-
-    println!("{}", equation);
+    let mut formula = String::new();
+    stdin().read_line(&mut formula).expect("wrong input");
+    let mut equation = Equation::new(formula);
 }
