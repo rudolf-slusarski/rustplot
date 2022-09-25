@@ -1,6 +1,7 @@
 pub struct Equation {
     pub formula: String,
     variable_count: i32,
+    special_functions: Vec<SpecialFunction>,
 }
 
 impl Equation {
@@ -8,6 +9,7 @@ impl Equation {
         Self {
             formula,
             variable_count: 0,
+            special_functions: vec![],
         }
     }
 
