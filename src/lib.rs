@@ -21,4 +21,5 @@ pub enum SpecialFunction {
     Sine,
     Cosine,
     Tangent,
+    Absolute,
 }
