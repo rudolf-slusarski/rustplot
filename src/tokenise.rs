@@ -35,6 +35,12 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
 
     while let Some(&c) = it.peek() {
         match c {
+
+            // numbers
+            '0'..='9' => {
+                todo!()
+            }
+
             // operations
             '+' | '-' | '*' | '/' | '^'  => {
                 result.push(Symbol::Operation(c));
@@ -52,7 +58,12 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
                 it.next();
             }
 
-            // numbers and error handling
+            // variables
+            'a'..='z' => {
+                todo!()
+            }
+
+            // error handling
             _ => todo!(),
         }
     }
