@@ -1,3 +1,5 @@
+mod tokenise;
+
 pub struct Equation {
     pub formula: String,
     variable_count: i32,
@@ -15,7 +17,7 @@ impl Equation {
 
 }
 
-enum SpecialFunction {
+pub enum SpecialFunction {
     Sine,
     Cosine,
     Tangent,
