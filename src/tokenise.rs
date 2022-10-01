@@ -34,6 +34,24 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
 
     while let Some(&c) = it.peek() {
         match c {
+            // operations
+            '+' | '-' | '*' | '/' | '^'  => {
+                result.push(Symbol::Operation(c));
+                it.next();
+            }
+
+            // parentheses
+            '(' | ')' | '[' | ']' | '{' | '}' => {
+                result.push(Symbol::Paren(c));
+                it.next();
+            }
+
+            // ignore spaces
+            ' ' => {
+                it.next();
+            }
+
+            // numbers and error handling
             _ => todo!(),
         }
     }
