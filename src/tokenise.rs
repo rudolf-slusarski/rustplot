@@ -5,6 +5,7 @@ enum Token {
     Product,
     Sum,
     Number(i64),
+    Variable(char),
     Function(SpecialFunction),
 }
 
