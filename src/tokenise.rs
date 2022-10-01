@@ -21,3 +21,22 @@ impl Node {
         }
     }
 }
+
+pub enum Symbol {
+    Paren(char),
+    Operation(char),
+    Number(u8),
+}
+
+pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
+    let mut result = vec![];
+    let mut it = equation.chars().peekable();
+
+    while let Some(&c) = it.peek() {
+        match c {
+            _ => todo!(),
+        }
+    }
+
+    result
+}
