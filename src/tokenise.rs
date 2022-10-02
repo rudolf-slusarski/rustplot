@@ -122,8 +122,15 @@ mod tests {
     #[test]
     fn symbol_number() {
         assert_eq!(
-            split_into_symbols(&String::from("31313"))[0],
-            Symbol::Number(31313)
+            split_into_symbols(&String::from("100031"))[0],
+            Symbol::Number(100031)
         );
+    }
+
+    #[test]
+    fn symbol_two_numbers() {
+        let eq = split_into_symbols(&String::from("31      13"));
+        assert_eq!(eq[0], Symbol::Number(31));
+        assert_eq!(eq[1], Symbol::Number(13));
     }
 }
