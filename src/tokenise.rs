@@ -43,7 +43,7 @@ pub fn check_for_more_digits<T: Iterator<Item = char>>(
     number
 }
 
-pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
+pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
     let mut result = vec![];
     let mut iter = equation.chars().peekable();
 
@@ -73,18 +73,16 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
             ' ' => {
                 iter.next();
             }
-
-            // variables
-            'a'..='z' => {
-                todo!()
-            }
+            
+            // todo: variables
 
             // error handling
-            _ => todo!(),
+            _ => return Err(format!("unexpected character: {}", c)),
+
         }
     }
 
-    result
+    Ok(result)
 }
 
 #[cfg(test)]
@@ -94,7 +92,7 @@ mod tests {
     #[test]
     fn symbol_parentheses() {
         assert_eq!(
-            split_into_symbols(&String::from("("))[0],
+            split_into_symbols(&String::from("(")).unwrap()[0],
             Symbol::Paren('(')
         );
     }
@@ -102,34 +100,37 @@ mod tests {
     #[test]
     fn symbol_space() {
         assert_eq!(
-            split_into_symbols(&String::from("    ("))[0],
+            split_into_symbols(&String::from("    (")).unwrap()[0],
             Symbol::Paren('(')
         );
     }
 
     #[test]
     fn symbol_two_parens() {
-        let eq = split_into_symbols(&String::from("()"));
+        let eq = split_into_symbols(&String::from("()")).unwrap();
         assert_eq!(eq[0], Symbol::Paren('('));
         assert_eq!(eq[1], Symbol::Paren(')'));
     }
 
     #[test]
     fn symbol_digit() {
-        assert_eq!(split_into_symbols(&String::from("1"))[0], Symbol::Number(1));
+        assert_eq!(
+            split_into_symbols(&String::from("1")).unwrap()[0],
+            Symbol::Number(1)
+        );
     }
 
     #[test]
     fn symbol_number() {
         assert_eq!(
-            split_into_symbols(&String::from("100031"))[0],
+            split_into_symbols(&String::from("100031")).unwrap()[0],
             Symbol::Number(100031)
         );
     }
 
     #[test]
     fn symbol_two_numbers() {
-        let eq = split_into_symbols(&String::from("31      13"));
+        let eq = split_into_symbols(&String::from("31      13")).unwrap();
         assert_eq!(eq[0], Symbol::Number(31));
         assert_eq!(eq[1], Symbol::Number(13));
     }
