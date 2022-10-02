@@ -1,3 +1,5 @@
+use std::iter::Peekable;
+
 use crate::SpecialFunction;
 
 enum Token {
@@ -23,11 +25,14 @@ impl Node {
     }
 }
 
+#[derive(Debug, PartialEq)]
 pub enum Symbol {
     Paren(char),
     Operation(char),
-    Number(u8),
+    Number(u32),
 }
+
+pub fn check_for_digits<T: Iterator>(it: &Peekable<T>) -> u32 { 0 }
 
 pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
     let mut result = vec![];
@@ -35,14 +40,19 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
 
     while let Some(&c) = it.peek() {
         match c {
-
             // numbers
             '0'..='9' => {
+                let number = c.to_digit(10).unwrap();
+
+                // check for more digits
+
+                result.push(Symbol::Number(number));
+                it.next();
                 todo!()
             }
 
             // operations
-            '+' | '-' | '*' | '/' | '^'  => {
+            '+' | '-' | '*' | '/' | '^' => {
                 result.push(Symbol::Operation(c));
                 it.next();
             }
@@ -69,4 +79,32 @@ pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
     }
 
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::tokenise::{split_into_symbols, Symbol};
+
+    #[test]
+    fn symbol_parentheses() {
+        assert_eq!(
+            split_into_symbols(&String::from("("))[0],
+            Symbol::Paren('(')
+        );
+    }
+
+    #[test]
+    fn symbol_space() {
+        assert_eq!(
+            split_into_symbols(&String::from("    ("))[0],
+            Symbol::Paren('(')
+        );
+    }
+
+    #[test]
+    fn symbol_two_parens() {
+        let eq = split_into_symbols(&String::from("()"));
+        assert_eq!(eq[0], Symbol::Paren('('));
+        assert_eq!(eq[1], Symbol::Paren(')'));
+    }
 }
