@@ -30,6 +30,7 @@ pub enum Symbol {
     Paren(char),
     Operation(char),
     Number(u32),
+    Variable(char),
 }
 
 pub fn check_for_more_digits<T: Iterator<Item = char>>(
