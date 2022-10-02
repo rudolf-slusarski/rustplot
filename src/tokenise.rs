@@ -32,40 +32,46 @@ pub enum Symbol {
     Number(u32),
 }
 
-pub fn check_for_digits<T: Iterator>(it: &Peekable<T>) -> u32 { 0 }
+pub fn check_for_more_digits<T: Iterator<Item = char>>(
+    mut number: u32,
+    iter: &mut Peekable<T>,
+) -> u32 {
+    while let Some(Ok(digit)) = iter.peek().map(|c| c.to_string().parse::<u32>()) {
+        number = number * 10 + digit;
+        iter.next();
+    }
+    number
+}
 
 pub fn split_into_symbols(equation: &String) -> Vec<Symbol> {
     let mut result = vec![];
-    let mut it = equation.chars().peekable();
+    let mut iter = equation.chars().peekable();
 
-    while let Some(&c) = it.peek() {
+    while let Some(&c) = iter.peek() {
         match c {
             // numbers
             '0'..='9' => {
+                iter.next();
                 let number = c.to_digit(10).unwrap();
-
-                // check for more digits
-
+                let number = check_for_more_digits(number, &mut iter);
                 result.push(Symbol::Number(number));
-                it.next();
-                todo!()
             }
 
             // operations
             '+' | '-' | '*' | '/' | '^' => {
                 result.push(Symbol::Operation(c));
-                it.next();
+                iter.next();
             }
 
             // parentheses
             '(' | ')' | '[' | ']' | '{' | '}' => {
                 result.push(Symbol::Paren(c));
-                it.next();
+                iter.next();
             }
 
             // ignore spaces
             ' ' => {
-                it.next();
+                iter.next();
             }
 
             // variables
@@ -106,5 +112,18 @@ mod tests {
         let eq = split_into_symbols(&String::from("()"));
         assert_eq!(eq[0], Symbol::Paren('('));
         assert_eq!(eq[1], Symbol::Paren(')'));
+    }
+
+    #[test]
+    fn symbol_digit() {
+        assert_eq!(split_into_symbols(&String::from("1"))[0], Symbol::Number(1));
+    }
+
+    #[test]
+    fn symbol_number() {
+        assert_eq!(
+            split_into_symbols(&String::from("31313"))[0],
+            Symbol::Number(31313)
+        );
     }
 }
