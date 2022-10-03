@@ -1,6 +1,6 @@
 use std::iter::Peekable;
 
-use crate::SpecialFunction;
+use crate::{Equation, SpecialFunction};
 
 enum Token {
     Paren,
@@ -32,8 +32,6 @@ pub enum Symbol {
     Number(u32),
     Variable(char),
 }
-
-
 
 pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
     let mut result = vec![];
@@ -82,6 +80,22 @@ fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<
         iter.next();
     }
     number
+}
+
+fn parse_symbol(symbols: &Vec<Symbol>, pos: usize) -> Result<(Node, usize), String> {
+    let s: &Symbol = symbols.get(pos);
+    match s {
+        &Symbol::Number(n) => {
+            let mut node = Node::new();
+            node.token = Token::Number(n);
+            Ok((node, pos + 1))
+        }
+        _ => todo!(),
+    }
+}
+
+fn parse(formula: &String) -> Result<Node, String> {
+    let symbols = split_into_symbols(formula)?;
 }
 
 #[cfg(test)]
