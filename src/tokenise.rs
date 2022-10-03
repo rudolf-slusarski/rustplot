@@ -33,16 +33,7 @@ pub enum Symbol {
     Variable(char),
 }
 
-pub fn check_for_more_digits<T: Iterator<Item = char>>(
-    mut number: u32,
-    iter: &mut Peekable<T>,
-) -> u32 {
-    while let Some(Ok(digit)) = iter.peek().map(|c| c.to_string().parse::<u32>()) {
-        number = number * 10 + digit;
-        iter.next();
-    }
-    number
-}
+
 
 pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
     let mut result = vec![];
@@ -53,8 +44,7 @@ pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
             // numbers
             '0'..='9' => {
                 iter.next();
-                let number = c.to_digit(10).unwrap();
-                let number = check_for_more_digits(number, &mut iter);
+                let number = check_for_more_digits(c, &mut iter);
                 result.push(Symbol::Number(number));
             }
 
@@ -74,16 +64,24 @@ pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
             ' ' => {
                 iter.next();
             }
-            
+
             // todo: variables
 
             // error handling
             _ => return Err(format!("unexpected character: {}", c)),
-
         }
     }
 
     Ok(result)
+}
+
+fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<T>) -> u32 {
+    let mut number = c.to_digit(10).unwrap();
+    while let Some(Ok(digit)) = iter.peek().map(|c| c.to_string().parse::<u32>()) {
+        number = number * 10 + digit;
+        iter.next();
+    }
+    number
 }
 
 #[cfg(test)]
