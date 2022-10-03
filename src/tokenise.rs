@@ -17,10 +17,10 @@ struct Node {
 }
 
 impl Node {
-    fn new() -> Self {
+    fn new(token: Token) -> Self {
         Self {
             children: vec![],
-            token: Token::Paren,
+            token,
         }
     }
 }
@@ -86,10 +86,24 @@ fn parse_symbol(symbols: &Vec<Symbol>, pos: usize) -> Result<(Node, usize), Stri
     let s: &Symbol = symbols.get(pos);
     match s {
         &Symbol::Number(n) => {
-            let mut node = Node::new();
-            node.token = Token::Number(n);
+            let node = Node::new(n);
             Ok((node, pos + 1))
         }
+
+        &Symbol::Operation(c) => {
+            let node = match c {
+                '+' => Node::new(Token::Sum),
+                '*' => Node::new(Token::Product),
+                _ => todo!(),
+            };
+            Ok((node, pos + 1))
+        }
+
+        // parentheses ???
+        &Symbol::Paren(c) => match c {
+            _ => todo!(),
+        },
+
         _ => todo!(),
     }
 }
