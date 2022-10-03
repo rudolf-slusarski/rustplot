@@ -1,12 +1,12 @@
 use std::iter::Peekable;
 
-use crate::{Equation, SpecialFunction};
+use crate::SpecialFunction;
 
 enum Token {
     Paren,
     Product,
     Sum,
-    Number(i64),
+    Number(u32),
     Variable(char),
     Function(SpecialFunction),
 }
@@ -83,10 +83,10 @@ fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<
 }
 
 fn parse_symbol(symbols: &Vec<Symbol>, pos: usize) -> Result<(Node, usize), String> {
-    let s: &Symbol = symbols.get(pos);
+    let s: &Symbol = symbols.get(pos).unwrap(); /// this is wrong
     match s {
         &Symbol::Number(n) => {
-            let node = Node::new(n);
+            let node = Node::new(Token::Number(n));
             Ok((node, pos + 1))
         }
 
