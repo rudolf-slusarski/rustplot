@@ -2,22 +2,27 @@ use std::iter::Peekable;
 
 use crate::SpecialFunction;
 
-enum Token {
+enum TokenType {
     Paren,
-    Product,
-    Sum,
+    Multiplication,
+    Addition,
     Number(u32),
     Variable(char),
     Function(SpecialFunction),
+
+    // hopefully i can simplify these later on
+    Subtraction,
+    Division,
+    Exponentiation,
 }
 
 struct Node {
     children: Vec<Node>,
-    token: Token,
+    token: TokenType,
 }
 
 impl Node {
-    fn new(token: Token) -> Self {
+    fn new(token: TokenType) -> Self {
         Self {
             children: vec![],
             token,
@@ -26,14 +31,14 @@ impl Node {
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Symbol {
+pub enum Token {
     Paren(char),
     Operation(char),
     Number(u32),
     Variable(char),
 }
 
-pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
+pub fn tokenise(equation: &String) -> Result<Vec<Token>, String> {
     let mut result = vec![];
     let mut iter = equation.chars().peekable();
 
@@ -43,18 +48,18 @@ pub fn split_into_symbols(equation: &String) -> Result<Vec<Symbol>, String> {
             '0'..='9' => {
                 iter.next();
                 let number = check_for_more_digits(c, &mut iter);
-                result.push(Symbol::Number(number));
+                result.push(Token::Number(number));
             }
 
             // operations
             '+' | '-' | '*' | '/' | '^' => {
-                result.push(Symbol::Operation(c));
+                result.push(Token::Operation(c));
                 iter.next();
             }
 
             // parentheses
             '(' | ')' | '[' | ']' | '{' | '}' => {
-                result.push(Symbol::Paren(c));
+                result.push(Token::Paren(c));
                 iter.next();
             }
 
@@ -82,25 +87,29 @@ fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<
     number
 }
 
-fn parse_symbol(symbols: &Vec<Symbol>, pos: usize) -> Result<(Node, usize), String> {
-    let s: &Symbol = symbols.get(pos).unwrap(); /// this is wrong
+fn parse_token(symbols: &Vec<Token>, pos: usize) -> Result<(Node, usize), String> {
+    let s: &Token = symbols.get(pos).unwrap();
+    /// this .unwrap() is wrong
     match s {
-        &Symbol::Number(n) => {
-            let node = Node::new(Token::Number(n));
+        &Token::Number(n) => {
+            let node = Node::new(TokenType::Number(n));
             Ok((node, pos + 1))
         }
 
-        &Symbol::Operation(c) => {
+        &Token::Operation(c) => {
             let node = match c {
-                '+' => Node::new(Token::Sum),
-                '*' => Node::new(Token::Product),
+                '+' => Node::new(TokenType::Addition),
+                '*' => Node::new(TokenType::Multiplication),
+                '-' => Node::new(TokenType::Subtraction),
+                '/' => Node::new(TokenType::Division),
+                '^' => Node::new(TokenType::Exponentiation),
                 _ => todo!(),
             };
             Ok((node, pos + 1))
         }
 
         // parentheses ???
-        &Symbol::Paren(c) => match c {
+        &Token::Paren(c) => match c {
             _ => todo!(),
         },
 
@@ -108,57 +117,56 @@ fn parse_symbol(symbols: &Vec<Symbol>, pos: usize) -> Result<(Node, usize), Stri
     }
 }
 
-fn parse(formula: &String) -> Result<Node, String> {
-    let symbols = split_into_symbols(formula)?;
+fn parse_next(tokens: &Vec<Token>, pos: usize) {}
+
+fn parse_expression(tokens: &Vec<Token>, pos: usize) {}
+
+fn parse_equation(formula: &String) {
+    let tokens = tokenise(formula)?;
+    parse_expression(&symbols, 0)
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::tokenise::{split_into_symbols, Symbol};
+    use crate::tokenise::{tokenise, Token};
 
     #[test]
     fn symbol_parentheses() {
-        assert_eq!(
-            split_into_symbols(&String::from("(")).unwrap()[0],
-            Symbol::Paren('(')
-        );
+        assert_eq!(tokenise(&String::from("(")).unwrap()[0], Token::Paren('('));
     }
 
     #[test]
     fn symbol_space() {
         assert_eq!(
-            split_into_symbols(&String::from("    (")).unwrap()[0],
-            Symbol::Paren('(')
+            tokenise(&String::from("    (")).unwrap()[0],
+            Token::Paren('(')
         );
     }
 
     #[test]
     fn symbol_two_parens() {
-        let eq = split_into_symbols(&String::from("()")).unwrap();
-        assert_eq!(eq[0], Symbol::Paren('('));
-        assert_eq!(eq[1], Symbol::Paren(')'));
+        let eq = tokenise(&String::from("()")).unwrap();
+        assert_eq!(eq[0], Token::Paren('('));
+        assert_eq!(eq[1], Token::Paren(')'));
     }
 
     #[test]
     fn symbol_digit() {
-        assert_eq!(
-            split_into_symbols(&String::from("1")).unwrap()[0],
-            Symbol::Number(1)
-        );
+        assert_eq!(tokenise(&String::from("1")).unwrap()[0], Token::Number(1));
     }
 
     #[test]
     fn symbol_number() {
         assert_eq!(
-            split_into_symbols(&String::from("100031")).unwrap()[0],
-            Symbol::Number(100031)
+            tokenise(&String::from("100031")).unwrap()[0],
+            Token::Number(100031)
         );
     }
 
     #[test]
     fn symbol_two_numbers() {
-        let eq = split_into_symbols(&String::from("31      13")).unwrap();
-        assert_eq!(eq[0], Symbol::Number(31));
-        assert_eq!(eq[1], Symbol::Number(13));
+        let eq = tokenise(&String::from("31      13")).unwrap();
+        assert_eq!(eq[0], Token::Number(31));
+        assert_eq!(eq[1], Token::Number(13));
     }
 }
