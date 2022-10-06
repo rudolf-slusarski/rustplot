@@ -126,37 +126,23 @@ fn match_parentheses(tokens: &Vec<Token>) -> bool {
 
     for t in tokens {
         match t {
-            Token::Paren(c) => match c {
-                '(' => open_parens += 1,
-                '[' => open_brackets += 1,
-                '{' => open_braces += 1,
-                ')' => {
-                    if open_parens > 0 {
-                        open_parens -= 1
-                    } else {
-                        return false;
-                    }
+            Token::Paren(c) => {
+                match c {
+                    '(' => open_parens += 1,
+                    '[' => open_brackets += 1,
+                    '{' => open_braces += 1,
+                    ')' => open_parens -= 1,
+                    ']' => open_brackets -= 1,
+                    '}' => open_braces -= 1,
+                    _ => (),
+                };
+                if open_parens > 0 || open_brackets > 0 || open_braces > 0 {
+                    return false;
                 }
-                ']' => {
-                    if open_brackets > 0 {
-                        open_brackets -= 1
-                    } else {
-                        return false;
-                    }
-                }
-                '}' => {
-                    if open_braces > 0 {
-                        open_braces -= 1
-                    } else {
-                        return false;
-                    }
-                }
-                _ => (),
-            },
+            }
             _ => (),
         }
     }
-
     true
 }
 
