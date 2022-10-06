@@ -2,7 +2,7 @@ mod tokenise;
 
 pub struct Equation {
     pub formula: String,
-    variable_count: i32,
+    variable_count: u32,
     special_functions: Vec<SpecialFunction>,
 }
 
