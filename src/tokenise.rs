@@ -119,24 +119,24 @@ fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String>
     }
 }
 
+/// verify the order and matching of parentheses
 fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
-    let mut open_parens = 0;
-    let mut open_brackets = 0;
-    let mut open_braces = 0;
+    // [parens, brackets, braces]
+    let mut open_parens = [0, 0, 0];
 
     for t in tokens {
         match t {
             Token::Paren(c) => {
                 match c {
-                    '(' => open_parens += 1,
-                    '[' => open_brackets += 1,
-                    '{' => open_braces += 1,
-                    ')' => open_parens -= 1,
-                    ']' => open_brackets -= 1,
-                    '}' => open_braces -= 1,
+                    '(' => open_parens[0] += 1,
+                    '[' => open_parens[1] += 1,
+                    '{' => open_parens[2] += 1,
+                    ')' => open_parens[0] -= 1,
+                    ']' => open_parens[1] -= 1,
+                    '}' => open_parens[2] -= 1,
                     _ => (),
                 };
-                if open_parens > 0 || open_brackets > 0 || open_braces > 0 {
+                if open_parens.contains(&-1) {
                     return Err(format!("parentheses not matching"));
                 }
             }
