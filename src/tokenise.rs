@@ -1,5 +1,5 @@
 #![allow(dead_code)] // for now
-use std::iter::Peekable;
+use std::{any::Any, iter::Peekable};
 
 use crate::SpecialFunction;
 
@@ -71,7 +71,7 @@ pub fn tokenise(equation: &String) -> Result<Vec<Token>, String> {
             }
 
             // todo: variable(s)
-            
+
             // error handling
             _ => return Err(format!("unexpected character: {}", c)),
         }
@@ -117,6 +117,47 @@ fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String>
 
         _ => todo!(),
     }
+}
+
+fn match_parentheses(tokens: &Vec<Token>) -> bool {
+    let mut open_parens = 0;
+    let mut open_brackets = 0;
+    let mut open_braces = 0;
+
+    for t in tokens {
+        match t {
+            Token::Paren(c) => match c {
+                '(' => open_parens += 1,
+                '[' => open_brackets += 1,
+                '{' => open_braces += 1,
+                ')' => {
+                    if open_parens > 0 {
+                        open_parens -= 1
+                    } else {
+                        return false;
+                    }
+                }
+                ']' => {
+                    if open_brackets > 0 {
+                        open_brackets -= 1
+                    } else {
+                        return false;
+                    }
+                }
+                '}' => {
+                    if open_braces > 0 {
+                        open_braces -= 1
+                    } else {
+                        return false;
+                    }
+                }
+                _ => (),
+            },
+            _ => (),
+        }
+    }
+
+    true
 }
 
 #[cfg(test)]
