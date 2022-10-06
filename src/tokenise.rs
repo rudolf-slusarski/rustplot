@@ -1,5 +1,5 @@
 #![allow(dead_code)] // for now
-use std::{any::Any, iter::Peekable};
+use std::iter::Peekable;
 
 use crate::SpecialFunction;
 
@@ -144,6 +144,11 @@ fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
         }
     }
     Ok(())
+}
+
+// this should return something like an array (vector?) of coefficients sorted by degree of x
+fn evaluate_nodes(tree: Node) -> Vec<i32> {
+    todo!()
 }
 
 #[cfg(test)]
