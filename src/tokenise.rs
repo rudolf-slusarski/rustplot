@@ -1,3 +1,4 @@
+#![allow(dead_code)] // for now
 use std::iter::Peekable;
 
 use crate::SpecialFunction;
@@ -9,6 +10,7 @@ enum TokenType {
     Number(u32),
     Variable(char),
     Function(SpecialFunction),
+    Comma,
 
     // hopefully i can simplify these later on
     Subtraction,
@@ -68,8 +70,8 @@ pub fn tokenise(equation: &String) -> Result<Vec<Token>, String> {
                 iter.next();
             }
 
-            // todo: variables
-
+            // todo: variable(s)
+            
             // error handling
             _ => return Err(format!("unexpected character: {}", c)),
         }
@@ -87,9 +89,9 @@ fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<
     number
 }
 
-fn parse_token(symbols: &Vec<Token>, pos: usize) -> Result<(Node, usize), String> {
-    let s: &Token = symbols.get(pos).unwrap();
-    /// this .unwrap() is wrong
+fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String> {
+    let s: &Token = tokens.get(pos).unwrap();
+    // this .unwrap() is wrong (also cheating)
     match s {
         &Token::Number(n) => {
             let node = Node::new(TokenType::Number(n));
@@ -115,15 +117,6 @@ fn parse_token(symbols: &Vec<Token>, pos: usize) -> Result<(Node, usize), String
 
         _ => todo!(),
     }
-}
-
-fn parse_next(tokens: &Vec<Token>, pos: usize) {}
-
-fn parse_expression(tokens: &Vec<Token>, pos: usize) {}
-
-fn parse_equation(formula: &String) {
-    let tokens = tokenise(formula)?;
-    parse_expression(&symbols, 0)
 }
 
 #[cfg(test)]
