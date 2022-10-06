@@ -119,7 +119,7 @@ fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String>
     }
 }
 
-fn match_parentheses(tokens: &Vec<Token>) -> bool {
+fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
     let mut open_parens = 0;
     let mut open_brackets = 0;
     let mut open_braces = 0;
@@ -137,13 +137,13 @@ fn match_parentheses(tokens: &Vec<Token>) -> bool {
                     _ => (),
                 };
                 if open_parens > 0 || open_brackets > 0 || open_braces > 0 {
-                    return false;
+                    return Err(format!("parentheses not matching"));
                 }
             }
             _ => (),
         }
     }
-    true
+    Ok(())
 }
 
 #[cfg(test)]
