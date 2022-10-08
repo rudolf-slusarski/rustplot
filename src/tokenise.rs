@@ -71,6 +71,10 @@ pub fn tokenise(equation: &String) -> Result<Vec<Token>, String> {
             }
 
             // todo: variable(s)
+            'x' => {
+                result.push(Token::Variable('x'));
+                iter.next();
+            }
 
             // error handling
             _ => return Err(format!("unexpected character: {}", c)),
@@ -153,7 +157,13 @@ fn evaluate_nodes(tree: Node) -> Vec<i32> {
 
 #[cfg(test)]
 mod tests {
-    use crate::tokenise::{tokenise, Token};
+    use crate::tokenise::{tokenise, Token, verify_parentheses};
+
+    #[test]
+    fn parentheses_not_matching(){
+        let parens = vec![Token::Paren(')'), Token::Paren('(')];
+        assert_ne!(Ok(()),verify_parentheses(&parens));
+    }
 
     #[test]
     fn symbol_parentheses() {
