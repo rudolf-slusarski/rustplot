@@ -1,3 +1,4 @@
+mod plot;
 mod tokenise;
 
 pub struct Equation {

@@ -157,12 +157,12 @@ fn evaluate_nodes(tree: Node) -> Vec<i32> {
 
 #[cfg(test)]
 mod tests {
-    use crate::tokenise::{tokenise, Token, verify_parentheses};
+    use crate::tokenise::{tokenise, verify_parentheses, Token};
 
     #[test]
-    fn parentheses_not_matching(){
+    fn parentheses_not_matching() {
         let parens = vec![Token::Paren(')'), Token::Paren('(')];
-        assert_ne!(Ok(()),verify_parentheses(&parens));
+        assert_ne!(Ok(()), verify_parentheses(&parens));
     }
 
     #[test]
