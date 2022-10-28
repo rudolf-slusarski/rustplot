@@ -1,7 +1,6 @@
 #![allow(dead_code)] // for now
 use std::iter::Peekable;
 
-
 pub struct Equation {
     pub formula: String,
     variable_count: u32,
@@ -16,8 +15,8 @@ impl Equation {
             special_functions: vec![],
         }
     }
-
 }
+
 enum TokenType {
     Paren,
     Multiplication,
@@ -33,8 +32,7 @@ enum TokenType {
     Exponentiation,
 }
 
-
- enum SpecialFunction {
+enum SpecialFunction {
     Sine,
     Cosine,
     Tangent,
