@@ -6,7 +6,7 @@ impl Plot {
     pub fn new(data: Vec<(f64, f64)>) -> Self {
         Self { data }
     }
-    
+
     pub fn function<F>(f: F) -> Self
     where
         F: Fn(f64) -> f64,
