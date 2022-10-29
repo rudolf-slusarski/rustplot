@@ -1,3 +1,3 @@
-mod plot;
-mod tokenise;
-mod render;
+pub mod plot;
+pub mod tokenise;
+pub mod render;

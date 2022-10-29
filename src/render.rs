@@ -24,10 +24,11 @@ impl Layout {
 
     fn add_axis(&self) -> Line {
         let axis = Line::new()
-            .set("x1", 10)
+            .set("x1", 100)
             .set("x2", 100)
-            .set("y1", 10)
+            .set("y1", 100)
             .set("y2", 200)
+            .set("stroke", "black")
             .set("stroke_width", 1);
         axis
     }
@@ -41,7 +42,7 @@ impl Layout {
         document
     }
 
-    fn save(&self) {
-        svg::save("plot.svg", &self.to_svg());
+    pub fn save(&self, path: &str) {
+        svg::save(path, &self.to_svg());
     }
 }
