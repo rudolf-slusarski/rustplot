@@ -1,6 +1,9 @@
-use std::vec;
+use std::io;
 
-use svg::{node::element::Line, Document, Node};
+use svg::{
+    node::element::{Group, Line, Rectangle},
+    Document, Node,
+};
 
 use crate::plot::Plot;
 
@@ -12,7 +15,7 @@ pub struct Layout {
 impl Layout {
     pub fn new() -> Self {
         Self {
-            dimensions: (300, 300),
+            dimensions: (600, 400),
             elements: vec![],
         }
     }
@@ -22,27 +25,42 @@ impl Layout {
         self
     }
 
-    fn add_axis(&self) -> Line {
-        let axis = Line::new()
-            .set("x1", 100)
-            .set("x2", 100)
-            .set("y1", 100)
-            .set("y2", 200)
-            .set("stroke", "black")
-            .set("stroke_width", 1);
-        axis
+    fn draw_axes(&self) -> Group {
+        let mut axes = Group::new().set("stroke", "black").set("stroke_width", 1);
+        let (width, height) = self.dimensions;
+        let horizontal = Line::new()
+            .set("x1", 0)
+            .set("y1", height / 2)
+            .set("x2", width)
+            .set("y2", height / 2);
+        axes.append(horizontal);
+
+        let vertical = Line::new()
+            .set("x1", width / 2)
+            .set("y1", 0)
+            .set("x2", width / 2)
+            .set("y2", height);
+        axes.append(vertical);
+
+        axes
     }
 
     fn to_svg(&self) -> svg::Document {
         let (width, height) = self.dimensions;
         let mut document = Document::new().set("viewBox", (0, 0, width, height));
-
-        document.append(self.add_axis());
+        let background = Rectangle::new()
+            .set("fill", "white")
+            .set("x", 0)
+            .set("y", 0)
+            .set("width", width)
+            .set("height", height);
+        document.append(background);
+        document.append(self.draw_axes());
 
         document
     }
 
-    pub fn save(&self, path: &str) {
-        svg::save(path, &self.to_svg());
+    pub fn save(&self, path: &str) -> io::Result<()> {
+        svg::save(path, &self.to_svg())
     }
 }
