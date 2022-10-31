@@ -9,19 +9,19 @@ use crate::plot::Plot;
 
 pub struct Layout {
     dimensions: (u32, u32),
-    elements: Vec<Plot>,
+    plots: Vec<Plot>,
 }
 
 impl Layout {
     pub fn new() -> Self {
         Self {
             dimensions: (600, 400),
-            elements: vec![],
+            plots: vec![],
         }
     }
 
     pub fn add_plot(mut self, plot: Plot) -> Self {
-        self.elements.push(plot);
+        self.plots.push(plot);
         self
     }
 
@@ -45,7 +45,7 @@ impl Layout {
         axes
     }
 
-    fn to_svg(&self) -> svg::Document {
+    fn render(&self) -> svg::Document {
         let (width, height) = self.dimensions;
         let mut document = Document::new().set("viewBox", (0, 0, width, height));
         let background = Rectangle::new()
@@ -54,13 +54,18 @@ impl Layout {
             .set("y", 0)
             .set("width", width)
             .set("height", height);
+        
         document.append(background);
         document.append(self.draw_axes());
+
+        for p in &self.plots{
+            document.append(p.to_svg());
+        }
 
         document
     }
 
     pub fn save(&self, path: &str) -> io::Result<()> {
-        svg::save(path, &self.to_svg())
+        svg::save(path, &self.render())
     }
 }
