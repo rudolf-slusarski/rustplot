@@ -1,4 +1,4 @@
-use std::io::{self, stdin};
+use std::io;
 
 use rustplot::render::Layout;
 

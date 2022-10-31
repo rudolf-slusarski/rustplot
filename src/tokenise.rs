@@ -172,9 +172,9 @@ fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
 }
 
 // this should return something like an array (vector?) of coefficients sorted by degree of x
-fn evaluate_nodes(tree: Node) -> Vec<i32> {
-    todo!()
-}
+// fn evaluate_nodes(tree: Node) -> Vec<i32> {
+//     todo!()
+// }
 
 #[cfg(test)]
 mod tests {
