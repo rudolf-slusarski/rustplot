@@ -15,7 +15,7 @@ pub struct Layout {
 impl Layout {
     pub fn new() -> Self {
         Self {
-            dimensions: (600, 400),
+            dimensions: (700, 700),
             plots: vec![],
         }
     }
@@ -45,7 +45,7 @@ impl Layout {
         axes
     }
 
-    fn render(&self) -> svg::Document {
+    pub fn render(&self) -> svg::Document {
         let (width, height) = self.dimensions;
         let mut document = Document::new().set("viewBox", (0, 0, width, height));
         let background = Rectangle::new()
