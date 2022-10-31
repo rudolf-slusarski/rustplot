@@ -54,11 +54,11 @@ impl Layout {
             .set("y", 0)
             .set("width", width)
             .set("height", height);
-        
+
         document.append(background);
         document.append(self.draw_axes());
 
-        for p in &self.plots{
+        for p in &self.plots {
             document.append(p.to_svg());
         }
 
