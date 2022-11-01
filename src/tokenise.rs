@@ -53,7 +53,7 @@ impl Node {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Token {
     Paren(char),
     Operation(char),
@@ -117,13 +117,13 @@ fn check_for_more_digits<T: Iterator<Item = char>>(c: char, iter: &mut Peekable<
 fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String> {
     let s: &Token = tokens.get(pos).unwrap();
     // this .unwrap() is wrong (also cheating)
-    match s {
-        &Token::Number(n) => {
+    match *s {
+        Token::Number(n) => {
             let node = Node::new(TokenType::Number(n));
             Ok((node, pos + 1))
         }
 
-        &Token::Operation(c) => {
+        Token::Operation(c) => {
             let node = match c {
                 '+' => Node::new(TokenType::Addition),
                 '*' => Node::new(TokenType::Multiplication),
@@ -136,9 +136,7 @@ fn parse_token(tokens: &Vec<Token>, pos: usize) -> Result<(Node, usize), String>
         }
 
         // parentheses ???
-        &Token::Paren(c) => match c {
-            _ => todo!(),
-        },
+        Token::Paren(_) => todo!(),
 
         _ => todo!(),
     }
@@ -162,7 +160,7 @@ fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
                     _ => (),
                 };
                 if open_parens.contains(&-1) {
-                    return Err(format!("parentheses not matching"));
+                    return Err("parentheses not matching".to_string());
                 }
             }
             _ => (),
