@@ -16,11 +16,14 @@ impl Plot {
         Self { data }
     }
 
-    pub fn function<F>(f: F) -> Self
+    pub fn function<F>(f: F, inf: Option<i32>, sup: Option<i32>) -> Self
     where
         F: Fn(f64) -> f64,
     {
-        let values: Vec<(f64, f64)> = (-350..=350).map(|x| x as f64).map(|x| (x, f(x))).collect();
+        let values: Vec<(f64, f64)> = (inf.unwrap_or(-100)..=sup.unwrap_or(100))
+            .map(|x| x as f64)
+            .map(|x| (x, f(x)))
+            .collect();
         Plot::new(values)
     }
 
