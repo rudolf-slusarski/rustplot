@@ -1,5 +1,7 @@
 # rustplot
 
+[![Rust](https://github.com/rudolf-slusarski/rustplot/actions/workflows/rust.yml/badge.svg)](https://github.com/rudolf-slusarski/rustplot/actions/workflows/rust.yml)
+
 a tool for plotting functions
 
 ## roadmap
