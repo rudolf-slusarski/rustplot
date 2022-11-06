@@ -21,12 +21,12 @@ impl Display {
         let mut d: Vec<Command> = vec![];
         d.push(Command::Move(Position::Absolute, (0, 350).into()));
 
-        for n in &self.data {
-            d.push(Command::Line(
-                Position::Absolute,
-                (n.0 + 350.0, -(n.1 - 350.0)).into(),
-            ))
-        }
+        // for n in &self.data {
+        //     d.push(Command::Line(
+        //         Position::Absolute,
+        //         (n.0 + 350.0, -(n.1 - 350.0)).into(),
+        //     ))
+        // }
 
         let path = Data::from(d);
         let mut group = Group::new();
