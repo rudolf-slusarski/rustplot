@@ -6,13 +6,10 @@ fn main() -> io::Result<()> {
     // println!("input equation:");
     // let mut formula = String::new();
     // stdin().read_line(&mut formula).expect("wrong input");
+    let range = (-350, 350);
     let mut layout = Layout::new();
-    let infimum = -350;
-    let supremum = 350;
-    layout = layout.add_plot(Plot::function(
-        |x| x * x * 0.1,
-        Some(infimum),
-        Some(supremum),
-    ));
+    let cube_function = Plot::function(|x| x * x * x, Some(range.0), Some(range.1));
+    layout.set_range(range);
+    layout.add_plot(cube_function);
     layout.save("plot.svg")
 }

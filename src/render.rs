@@ -9,6 +9,7 @@ use crate::plot::Plot;
 
 pub struct Layout {
     dimensions: (u32, u32),
+    range: (i32, i32),
     plots: Vec<Plot>,
 }
 
@@ -16,13 +17,13 @@ impl Layout {
     pub fn new() -> Self {
         Self {
             dimensions: (700, 700),
+            range: (-350, 350),
             plots: vec![],
         }
     }
 
-    pub fn add_plot(mut self, plot: Plot) -> Self {
+    pub fn add_plot(&mut self, plot: Plot) {
         self.plots.push(plot);
-        self
     }
 
     fn draw_axes(&self) -> Group {
@@ -67,5 +68,13 @@ impl Layout {
 
     pub fn save(&self, path: &str) -> io::Result<()> {
         svg::save(path, &self.render())
+    }
+
+    pub fn range(&self) -> (i32, i32) {
+        self.range
+    }
+
+    pub fn set_range(&mut self, range: (i32, i32)) {
+        self.range = range;
     }
 }

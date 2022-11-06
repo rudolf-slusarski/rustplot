@@ -20,7 +20,7 @@ impl Plot {
     where
         F: Fn(f64) -> f64,
     {
-        let values: Vec<(f64, f64)> = (inf.unwrap_or(-100)..=sup.unwrap_or(100))
+        let values: Vec<(f64, f64)> = (inf.unwrap_or(-350)..=sup.unwrap_or(350))
             .map(|x| x as f64)
             .map(|x| (x, f(x)))
             .collect();
