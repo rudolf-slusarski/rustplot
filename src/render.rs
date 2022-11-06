@@ -60,7 +60,7 @@ impl Layout {
         document.append(self.draw_axes());
 
         for p in &self.plots {
-            document.append(p.to_svg());
+            document.append(p.to_svg(width as f64, height as f64));
         }
 
         document

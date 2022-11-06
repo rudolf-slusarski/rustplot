@@ -27,14 +27,14 @@ impl Plot {
         Plot::new(values)
     }
 
-    pub fn to_svg(&self) -> Group {
+    pub fn to_svg(&self, width: f64, height: f64) -> Group {
         let mut d: Vec<Command> = vec![];
-        d.push(Command::Move(Position::Absolute, (0, 350).into()));
+        d.push(Command::Move(Position::Absolute, (0, height / 2.).into()));
 
         for n in &self.data {
             d.push(Command::Line(
                 Position::Absolute,
-                (n.0 + 350.0, -(n.1 - 350.0)).into(),
+                (n.0 + width / 2., -(n.1 - height / 2.)).into(),
             ))
         }
 
