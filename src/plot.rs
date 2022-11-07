@@ -16,14 +16,24 @@ impl Plot {
         Self { data }
     }
 
-    pub fn function<F>(f: F, inf: Option<i32>, sup: Option<i32>, sampling: f64) -> Self
+    pub fn function<F>(f: F, inf: f64, sup: f64, sampling: f64) -> Self
     where
         F: Fn(f64) -> f64,
     {
-        let values: Vec<(f64, f64)> = (inf.unwrap_or(-350)..=sup.unwrap_or(350))
-            .map(|x| x as f64)
-            .map(|x| (x, f(x)))
-            .collect();
+        let samples_count = (sup - inf / 0.1) as u32;
+
+        let mut samples = vec![];
+        for n in 0..samples_count {
+            samples.push(inf + sampling * n as f64);
+        }
+
+        let values: Vec<(f64, f64)> = samples.iter().map(|x| (*x, f(*x))).collect();
+
+        // let values: Vec<(f64, f64)> = (inf..=sup)
+        //     // .map(|x| x as f64)
+        //     .map(|x| (x, f(x)))
+        //     .collect();
+
         Plot::new(values)
     }
 

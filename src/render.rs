@@ -9,7 +9,7 @@ use crate::plot::Plot;
 
 pub struct Layout {
     dimensions: (u32, u32),
-    range: (i32, i32),
+    range: (f64, f64),
     plots: Vec<Plot>,
 }
 
@@ -17,7 +17,7 @@ impl Layout {
     pub fn new() -> Self {
         Self {
             dimensions: (700, 700),
-            range: (-350, 350),
+            range: (-350., 350.),
             plots: vec![],
         }
     }
@@ -70,11 +70,11 @@ impl Layout {
         svg::save(path, &self.render())
     }
 
-    pub fn range(&self) -> (i32, i32) {
+    pub fn range(&self) -> (f64, f64) {
         self.range
     }
 
-    pub fn set_range(&mut self, range: (i32, i32)) {
+    pub fn set_range(&mut self, range: (f64, f64)) {
         self.range = range;
     }
 }
