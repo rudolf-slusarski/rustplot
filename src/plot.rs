@@ -16,7 +16,7 @@ impl Plot {
         Self { data }
     }
 
-    pub fn function<F>(f: F, inf: Option<i32>, sup: Option<i32>) -> Self
+    pub fn function<F>(f: F, inf: Option<i32>, sup: Option<i32>, sampling: f64) -> Self
     where
         F: Fn(f64) -> f64,
     {
