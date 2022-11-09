@@ -1,13 +1,15 @@
 [package]
-name = "rustplot"
-version = "0.1.0"
 author = "rudolf slusarski"
 edition = "2021"
 license = "MIT"
+name = "rustplot"
 readme = "README.md"
 repository = "https://github.com/rudolf-slusarski/rustplot"
+version = "0.1.0"
 
 [dependencies]
+config = "0.13.2"
+serde = "1.0.147"
 svg = "0.12.0"
 
 [dev-dependencies]
