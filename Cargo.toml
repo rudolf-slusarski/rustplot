@@ -11,6 +11,7 @@ version = "0.1.0"
 config = "0.13.2"
 serde = "1.0.147"
 svg = "0.12.0"
+toml = "0.5.9"
 
 [dev-dependencies]
 rand = "0.8.5"
