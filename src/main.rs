@@ -9,6 +9,6 @@ fn main() -> io::Result<()> {
     let range = (600, 4000);
     let mut layout = Layout::new(range);
     // let cube_function = Plot::function(|x| x * x, range.0, range.1, 0.02);
-    
+
     layout.save("plot.svg")
 }

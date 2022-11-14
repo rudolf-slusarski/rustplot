@@ -55,5 +55,4 @@ impl Layout {
     pub fn save(&self, path: &str) -> io::Result<()> {
         svg::save(path, &self.render())
     }
-
 }
