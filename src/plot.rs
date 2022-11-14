@@ -54,7 +54,7 @@ impl Plot {
 
     pub fn as_svg(&self, dimensions: (f64, f64), axes: (Axis, Axis)) -> Group {
         let (mut horizontal, mut vertical) = axes;
-        
+
         horizontal.set_range((self.data[0].0, self.data.last().unwrap().0));
         vertical.set_range((self.get_min_value(), self.get_max_value()));
 
