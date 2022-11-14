@@ -92,7 +92,6 @@ mod tests {
     #[test]
     fn test_min_value() {
         let plot = Plot::function(|x| x * x + 30., -20.0, 10.0, 0.1);
-        println!("{}", plot.get_min_value());
         assert_eq!(30., plot.get_min_value());
     }
 }
