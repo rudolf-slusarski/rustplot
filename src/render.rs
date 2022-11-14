@@ -5,45 +5,32 @@ use svg::{
     Document, Node,
 };
 
-use crate::plot::Plot;
+use crate::{
+    axis::{Axis, Direction},
+    plot::Plot,
+};
 
 pub struct Layout {
     dimensions: (u32, u32),
-    range: (f64, f64),
     plots: Vec<Plot>,
+    x_axis: Axis,
+    y_axis: Axis,
 }
 
 impl Layout {
-    pub fn new() -> Self {
+    pub fn new(dimensions: (u32, u32)) -> Self {
+        let x_axis = Axis::new(Direction::Horizontal, (0.0, 0.0), dimensions);
+        let y_axis = Axis::new(Direction::Vertical, (0.0, 0.0), dimensions);
         Self {
-            dimensions: (700, 700),
-            range: (-350., 350.),
+            dimensions,
             plots: vec![],
+            x_axis,
+            y_axis,
         }
     }
 
     pub fn add_plot(&mut self, plot: Plot) {
         self.plots.push(plot);
-    }
-
-    fn draw_axes(&self) -> Group {
-        let mut axes = Group::new().set("stroke", "black").set("stroke_width", 1);
-        let (width, height) = self.dimensions;
-        let horizontal = Line::new()
-            .set("x1", 0)
-            .set("y1", height / 2)
-            .set("x2", width)
-            .set("y2", height / 2);
-        axes.append(horizontal);
-
-        let vertical = Line::new()
-            .set("x1", width / 2)
-            .set("y1", 0)
-            .set("x2", width / 2)
-            .set("y2", height);
-        axes.append(vertical);
-
-        axes
     }
 
     pub fn render(&self) -> svg::Document {
@@ -57,10 +44,9 @@ impl Layout {
             .set("height", height);
 
         document.append(background);
-        document.append(self.draw_axes());
 
         for p in &self.plots {
-            document.append(p.to_svg(width as f64, height as f64));
+            // document.append(p.as_svg(self.range));
         }
 
         document
@@ -70,11 +56,4 @@ impl Layout {
         svg::save(path, &self.render())
     }
 
-    pub fn range(&self) -> (f64, f64) {
-        self.range
-    }
-
-    pub fn set_range(&mut self, range: (f64, f64)) {
-        self.range = range;
-    }
 }

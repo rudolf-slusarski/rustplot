@@ -3,7 +3,7 @@ use svg::{
     Node,
 };
 
-enum Direction {
+pub enum Direction {
     Vertical,
     Horizontal,
 }
@@ -16,7 +16,7 @@ pub struct Axis {
 }
 
 impl Axis {
-    fn new(direction: Direction, range: (f64, f64), size: (u32, u32)) -> Self {
+    pub fn new(direction: Direction, range: (f64, f64), size: (u32, u32)) -> Self {
         Axis {
             direction,
             range,
@@ -25,8 +25,8 @@ impl Axis {
         }
     }
 
-    fn to_svg(&self) -> Group {
-        let mut group = Group::new().set("stroke", "black").set("stroke_width", 0.5);
+    fn as_svg(&self) -> Group {
+        let mut group = Group::new().set("stroke", "black").set("stroke_width", 1);
         let (width, height) = self.size;
 
         let axis = match self.direction {
