@@ -148,22 +148,19 @@ fn verify_parentheses(tokens: &Vec<Token>) -> Result<(), String> {
     let mut open_parens = [0, 0, 0];
 
     for t in tokens {
-        match t {
-            Token::Paren(c) => {
-                match c {
-                    '(' => open_parens[0] += 1,
-                    '[' => open_parens[1] += 1,
-                    '{' => open_parens[2] += 1,
-                    ')' => open_parens[0] -= 1,
-                    ']' => open_parens[1] -= 1,
-                    '}' => open_parens[2] -= 1,
-                    _ => (),
-                };
-                if open_parens.contains(&-1) {
-                    return Err("parentheses not matching".to_string());
-                }
+        if let Token::Paren(c) = t {
+            match c {
+                '(' => open_parens[0] += 1,
+                '[' => open_parens[1] += 1,
+                '{' => open_parens[2] += 1,
+                ')' => open_parens[0] -= 1,
+                ']' => open_parens[1] -= 1,
+                '}' => open_parens[2] -= 1,
+                _ => (),
+            };
+            if open_parens.contains(&-1) {
+                return Err("parentheses not matching".to_string());
             }
-            _ => (),
         }
     }
     Ok(())
