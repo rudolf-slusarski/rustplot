@@ -8,10 +8,10 @@ enum Direction {
     Horizontal,
 }
 
-struct Axis {
+pub struct Axis {
     direction: Direction,
-    range: (f64, f64),
-    size: (u32, u32),
+    pub range: (f64, f64),
+    pub size: (u32, u32),
     offset: u32,
 }
 
@@ -29,21 +29,25 @@ impl Axis {
         let mut group = Group::new().set("stroke", "black").set("stroke_width", 0.5);
         let (width, height) = self.size;
 
-        let x_axis = Line::new()
-            .set("x1", self.offset)
-            .set("y1", height / 2)
-            .set("x2", width - self.offset)
-            .set("y2", height / 2);
+        let axis = match self.direction {
+            Direction::Vertical => Line::new()
+                .set("x1", width / 2)
+                .set("y1", self.offset)
+                .set("x2", width / 2)
+                .set("y2", height - self.offset),
+            Direction::Horizontal => Line::new()
+                .set("x1", self.offset)
+                .set("y1", height / 2)
+                .set("x2", width - self.offset)
+                .set("y2", height / 2),
+        };
 
-        let y_axis = Line::new()
-            .set("x1", width / 2)
-            .set("y1", self.offset)
-            .set("x2", width / 2)
-            .set("y2", height - self.offset);
-
-        group.append(x_axis);
-        group.append(y_axis);
+        group.append(axis);
 
         group
+    }
+
+    pub fn set_offset(&mut self, offset: u32) {
+        self.offset = offset;
     }
 }
