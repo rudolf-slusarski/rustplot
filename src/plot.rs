@@ -38,8 +38,26 @@ impl Plot {
         Plot::new(values)
     }
 
+    fn get_min_value(&self) -> f64 {
+        self.data
+            .iter()
+            .map(|(_, v)| *v)
+            .fold(f64::MAX, |acc: f64, x: f64| acc.min(x))
+    }
+
+    fn get_max_value(&self) -> f64 {
+        self.data
+            .iter()
+            .map(|(_, v)| *v)
+            .fold(f64::MIN, |acc, x| acc.max(x))
+    }
+
     pub fn as_svg(&self, dimensions: (f64, f64), axes: (Axis, Axis)) -> Group {
-        let (horizontal, vertical) = axes;
+        let (mut horizontal, mut vertical) = axes;
+        
+        horizontal.set_range((self.data[0].0, self.data.last().unwrap().0));
+        vertical.set_range((self.get_min_value(), self.get_max_value()));
+
         let mut d: Vec<Command> = vec![];
         d.push(Command::Move(
             Position::Absolute,
@@ -64,5 +82,17 @@ impl Plot {
         );
 
         group
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Plot;
+
+    #[test]
+    fn test_min_value() {
+        let plot = Plot::function(|x| x * x + 30., -20.0, 10.0, 0.1);
+        println!("{}", plot.get_min_value());
+        assert_eq!(30., plot.get_min_value());
     }
 }

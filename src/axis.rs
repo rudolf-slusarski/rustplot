@@ -50,4 +50,8 @@ impl Axis {
     pub fn set_offset(&mut self, offset: u32) {
         self.offset = offset;
     }
+
+    pub fn set_range(&mut self, range: (f64, f64)) {
+        self.range = range;
+    }
 }
