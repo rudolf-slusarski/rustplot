@@ -48,7 +48,7 @@ impl Plot {
             .fold(f64::MIN, |acc, x| acc.max(x))
     }
 
-    pub fn as_svg(&self, dimensions: (f64, f64), axes: (Axis, Axis)) -> Group {
+    pub fn as_svg(&self, axes: (Axis, Axis)) -> Group {
         let (mut horizontal, mut vertical) = axes;
 
         horizontal.set_range((self.data[0].0, self.data.last().unwrap().0));
@@ -57,13 +57,17 @@ impl Plot {
         let mut d: Vec<Command> = vec![];
         d.push(Command::Move(
             Position::Absolute,
-            (horizontal.offset(), dimensions.0 / 2.).into(),
+            (
+                horizontal.place_value(self.data[0].0),
+                vertical.place_value(self.data[0].1),
+            )
+                .into(),
         ));
 
         for n in &self.data {
             d.push(Command::Line(
                 Position::Absolute,
-                (n.0 + dimensions.1 / 2., -(n.1 - dimensions.0 / 2.)).into(),
+                (horizontal.place_value(n.0), vertical.place_value(n.1)).into(),
             ))
         }
 

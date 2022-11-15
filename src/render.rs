@@ -1,9 +1,6 @@
 use std::io;
 
-use svg::{
-    node::element::{Group, Line, Rectangle},
-    Document, Node,
-};
+use svg::{node::element::Rectangle, Document, Node};
 
 use crate::{
     axis::{Axis, Direction},
@@ -44,9 +41,11 @@ impl Layout {
             .set("height", height);
 
         document.append(background);
+        document.append(self.x_axis.as_svg());
+        document.append(self.y_axis.as_svg());
 
         for p in &self.plots {
-            // document.append(p.as_svg(self.range));
+            document.append(p.as_svg((self.x_axis, self.y_axis)));
         }
 
         document
