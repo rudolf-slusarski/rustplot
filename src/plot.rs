@@ -29,7 +29,7 @@ impl Plot {
             samples.push(inf + sampling * n as f64);
         }
 
-        let values: Vec<(f64, f64)> = samples.iter().map(|x| (*x, f(*x))).collect();
+        let values: Vec<(f64, f64)> = samples.into_iter().map(|x| (x, f(x))).collect();
 
         Plot::new(values)
     }
