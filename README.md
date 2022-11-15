@@ -6,12 +6,13 @@ a tool for plotting functions
 
 ## roadmap
 
-- [ ] basic plotting engine
-  - [ ] input parsing
-    - [ ] constructing token tree
-    - [ ] evaluating the tree
-  - [ ] applying special functions
-  - [ ] drawing into image
-- [ ] output image resizing
+- [ ] input parsing
+- [ ] constructing token tree
+- [ ] converting the tree to a closure
+- [x] closure evaluation
+- [ ] converting data to svg
 - [ ] stacking multiple plots
-- [ ] some simple gui
+- [ ] resizing
+- [ ] rendering output image
+- [ ] external configuration
+- [ ] (possibly) some simple gui
